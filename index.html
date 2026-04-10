@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>World Shifters Institute — Luke 5 Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --navy:#0d1f3c; --navy-mid:#162d56; --navy-light:#1e3a6e;
+  --gold:#b8942a; --gold-light:#d4af5a; --gold-pale:#f0e4c0;
+  --beige:#ede5db; --beige-dark:#d9cfc3; --cream:#faf7f3;
+  --white:#fff; --success:#2a7a4b; --fail:#8b1a1a; --warn:#7a5a1a;
+  --text:#2c2c2c; --muted:#888;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Jost',sans-serif;background:var(--beige);color:var(--navy);min-height:100vh;}
+.view{display:none;min-height:100vh;}
+.view.active{display:block;}
+
+/* ── NAV ── */
+nav{background:var(--navy);height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 36px;position:sticky;top:0;z-index:200;box-shadow:0 2px 16px rgba(0,0,0,.3);}
+.nav-logo{display:flex;align-items:center;gap:12px;cursor:pointer;}
+.nav-logo-text{display:flex;flex-direction:column;line-height:1.1;}
+.nav-logo-text .top{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:700;color:var(--gold-light);letter-spacing:.12em;text-transform:uppercase;}
+.nav-logo-text .bot{font-size:9px;font-weight:500;color:rgba(255,255,255,.5);letter-spacing:.25em;text-transform:uppercase;}
+.nav-right{display:flex;align-items:center;gap:16px;}
+.nav-btn{background:transparent;border:1px solid rgba(184,148,42,.4);color:var(--gold-light);font-family:'Jost',sans-serif;font-size:11px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;padding:7px 18px;border-radius:2px;cursor:pointer;transition:.2s;}
+.nav-btn:hover{background:rgba(184,148,42,.1);}
+.nav-btn.primary{background:var(--gold);color:var(--navy);border-color:var(--gold);}
+.nav-btn.primary:hover{background:var(--gold-light);}
+.nav-user{font-size:12px;color:rgba(255,255,255,.6);letter-spacing:.04em;}
+.nav-badge{background:rgba(184,148,42,.2);color:var(--gold-light);font-size:10px;padding:3px 10px;border-radius:10px;letter-spacing:.1em;}
+
+/* ── HERO / LANDING ── */
+.hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 100%);padding:72px 40px 64px;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-80px;right:-80px;width:400px;height:400px;border-radius:50%;border:1px solid rgba(184,148,42,.1);}
+.hero::after{content:'';position:absolute;bottom:-100px;left:-60px;width:320px;height:320px;border-radius:50%;border:1px solid rgba(184,148,42,.08);}
+.hero-eye{font-size:10px;font-weight:500;letter-spacing:.35em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:54px;font-weight:700;color:var(--white);line-height:1.05;margin-bottom:16px;}
+.hero h1 span{color:var(--gold-light);}
+.hero p{font-size:15px;font-weight:300;color:rgba(255,255,255,.65);max-width:520px;margin:0 auto 40px;line-height:1.7;}
+.hero-divider{width:60px;height:1px;background:var(--gold);margin:0 auto 40px;opacity:.5;}
+
+/* ── PLAN CARDS ── */
+.plans-section{padding:64px 24px 80px;max-width:1060px;margin:0 auto;}
+.section-label{text-align:center;font-size:10px;font-weight:500;letter-spacing:.35em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;}
+.section-title{text-align:center;font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:700;color:var(--navy);margin-bottom:48px;}
+.plans-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+.plan-card{background:var(--cream);border:2px solid var(--beige-dark);border-radius:6px;overflow:hidden;transition:.25s;cursor:pointer;position:relative;}
+.plan-card:hover{border-color:var(--gold);transform:translateY(-4px);box-shadow:0 12px 40px rgba(13,31,60,.12);}
+.plan-card.featured{border-color:var(--gold);box-shadow:0 8px 32px rgba(184,148,42,.15);}
+.plan-badge{position:absolute;top:16px;right:16px;background:var(--gold);color:var(--navy);font-size:9px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:4px 10px;border-radius:2px;}
+.plan-header{background:var(--navy);padding:28px 24px 24px;}
+.plan-name{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--white);margin-bottom:4px;}
+.plan-tagline{font-size:11px;color:rgba(255,255,255,.5);letter-spacing:.08em;}
+.plan-price{padding:20px 24px 16px;}
+.plan-amount{font-family:'Cormorant Garamond',serif;font-size:42px;font-weight:700;color:var(--navy);}
+.plan-amount sup{font-size:20px;vertical-align:super;}
+.plan-amount sub{font-size:14px;font-weight:400;color:var(--muted);}
+.plan-features{padding:0 24px 28px;}
+.plan-features li{list-style:none;font-size:13px;font-weight:300;color:var(--text);padding:7px 0;border-bottom:1px solid var(--beige-dark);display:flex;align-items:center;gap:10px;}
+.plan-features li:last-child{border-bottom:none;}
+.plan-features li .fi{color:var(--gold);font-size:14px;}
+.plan-features li .fx{color:#ccc;}
+.plan-cta{display:block;margin:0 24px 24px;padding:14px;background:var(--navy);color:var(--white);border:none;border-radius:4px;font-family:'Jost',sans-serif;font-size:12px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;text-align:center;transition:.2s;}
+.plan-card.featured .plan-cta{background:var(--gold);color:var(--navy);}
+.plan-cta:hover{opacity:.9;}
+
+/* ── FORMS ── */
+.form-page{max-width:520px;margin:0 auto;padding:56px 24px 80px;}
+.form-card{background:var(--cream);border:1px solid var(--beige-dark);border-radius:6px;overflow:hidden;box-shadow:0 4px 24px rgba(13,31,60,.08);}
+.form-header{background:var(--navy);padding:24px 32px;}
+.form-header h2{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:700;color:var(--white);}
+.form-header p{font-size:12px;color:rgba(255,255,255,.5);margin-top:4px;letter-spacing:.04em;}
+.form-body{padding:32px;}
+.form-group{margin-bottom:20px;}
+.form-group label{display:block;font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--navy);margin-bottom:8px;}
+.form-group input,.form-group select{width:100%;padding:12px 14px;border:1px solid var(--beige-dark);border-radius:4px;background:var(--white);font-family:'Jost',sans-serif;font-size:14px;color:var(--navy);outline:none;transition:.2s;}
+.form-group input:focus,.form-group select:focus{border-color:var(--gold);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.form-submit{width:100%;padding:15px;background:var(--navy);color:var(--white);border:none;border-radius:4px;font-family:'Jost',sans-serif;font-size:12px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;transition:.2s;margin-top:8px;}
+.form-submit:hover{background:var(--navy-mid);}
+.form-submit:disabled{opacity:.5;cursor:not-allowed;}
+.form-footer{text-align:center;padding:16px 32px 28px;font-size:13px;color:var(--muted);}
+.form-footer a{color:var(--gold);cursor:pointer;text-decoration:underline;}
+.form-error{background:#fdf4f4;border:1px solid #f5c6cb;border-radius:4px;padding:12px 16px;font-size:13px;color:var(--fail);margin-bottom:16px;display:none;}
+.form-success{background:#f0faf4;border:1px solid #c3e6cb;border-radius:4px;padding:12px 16px;font-size:13px;color:var(--success);margin-bottom:16px;display:none;}
+
+/* ── PLAN SUMMARY (payment page) ── */
+.plan-summary{background:var(--navy);border-radius:4px;padding:16px 20px;margin-bottom:24px;display:flex;justify-content:space-between;align-items:center;}
+.plan-summary .ps-name{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--white);}
+.plan-summary .ps-price{font-size:14px;font-weight:600;color:var(--gold-light);}
+.square-notice{background:var(--gold-pale);border:1px solid rgba(184,148,42,.3);border-radius:4px;padding:14px 16px;font-size:12px;color:var(--warn);margin-bottom:20px;line-height:1.6;}
+.square-notice strong{display:block;margin-bottom:4px;}
+.card-form-placeholder{border:2px dashed var(--beige-dark);border-radius:4px;padding:20px;margin-bottom:16px;background:var(--white);}
+#square-card-container{min-height:80px;}
+.sq-label{font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--navy);margin-bottom:8px;display:block;}
+
+/* ── STUDENT DASHBOARD ── */
+.dash-layout{display:flex;min-height:calc(100vh - 68px);}
+.dash-sidebar{width:220px;background:var(--navy);padding:32px 0;flex-shrink:0;}
+.dash-sidebar-user{padding:0 20px 28px;border-bottom:1px solid rgba(255,255,255,.08);}
+.ds-name{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--white);font-weight:600;}
+.ds-plan{font-size:10px;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;margin-top:4px;}
+.ds-status{font-size:10px;color:#4caf50;margin-top:3px;}
+.ds-status.suspended{color:#ef5350;}
+.dash-nav{margin-top:20px;}
+.dash-nav-item{display:flex;align-items:center;gap:10px;padding:12px 20px;font-size:13px;font-weight:400;color:rgba(255,255,255,.6);cursor:pointer;transition:.2s;border-left:3px solid transparent;}
+.dash-nav-item:hover{color:var(--white);background:rgba(255,255,255,.05);}
+.dash-nav-item.active{color:var(--gold-light);border-left-color:var(--gold);background:rgba(184,148,42,.08);}
+.dash-nav-item .ni{font-size:16px;}
+.dash-main{flex:1;padding:40px;background:var(--beige);overflow-y:auto;}
+.dash-tab{display:none;}
+.dash-tab.active{display:block;}
+.dash-header{margin-bottom:32px;}
+.dash-header h2{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:700;color:var(--navy);}
+.dash-header p{font-size:14px;color:var(--muted);margin-top:4px;font-weight:300;}
+
+/* ── STATS CARDS ── */
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:32px;}
+.stat-card{background:var(--cream);border:1px solid var(--beige-dark);border-radius:6px;padding:20px 24px;}
+.stat-label{font-size:10px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+.stat-value{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:700;color:var(--navy);}
+.stat-sub{font-size:12px;color:var(--muted);margin-top:4px;font-weight:300;}
+
+/* ── VERIFIER (embedded) ── */
+.verifier-wrap{max-width:720px;}
+.v-card{background:var(--cream);border:1px solid var(--beige-dark);border-radius:6px;margin-bottom:20px;overflow:hidden;}
+.v-card-header{background:var(--navy);padding:14px 24px;display:flex;align-items:center;gap:10px;}
+.v-step{width:26px;height:26px;border-radius:50%;border:1px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:var(--gold-light);flex-shrink:0;}
+.v-card-header h3{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:var(--white);}
+.v-card-body{padding:24px;}
+.dir-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.dir-btn{padding:18px;border:2px solid var(--beige-dark);border-radius:4px;background:var(--white);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;transition:.2s;font-family:'Jost',sans-serif;}
+.dir-btn:hover{border-color:var(--gold);}
+.dir-btn.active.long{border-color:#2a7a4b;background:#f0faf4;}
+.dir-btn.active.short{border-color:#8b1a1a;background:#fdf4f4;}
+.dir-btn .dlbl{font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;}
+.dir-btn.active.long .dlbl{color:#2a7a4b;}
+.dir-btn.active.short .dlbl{color:#8b1a1a;}
+.dir-btn .dsub{font-size:11px;color:var(--muted);}
+.tf-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+.tf-btn{padding:16px 8px;border:2px solid var(--beige-dark);border-radius:4px;background:var(--white);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;transition:.2s;font-family:'Jost',sans-serif;}
+.tf-btn:hover{border-color:var(--gold);background:var(--gold-pale);}
+.tf-btn.active{border-color:var(--gold);background:var(--gold-pale);}
+.tf-btn.active .tf-lbl{color:var(--navy);}
+.tf-lbl{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--navy);line-height:1;}
+.tf-sub{font-size:10px;font-weight:400;color:var(--muted);letter-spacing:.06em;}
+.upload-zone{border:2px dashed var(--beige-dark);border-radius:4px;background:var(--white);padding:32px 16px;text-align:center;cursor:pointer;transition:.2s;position:relative;}
+.upload-zone:hover,.upload-zone.drag-over{border-color:var(--gold);background:var(--gold-pale);}
+.upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.upload-zone .uz-icon{font-size:28px;display:block;margin-bottom:8px;}
+.upload-zone .uz-p{font-size:13px;font-weight:500;color:var(--navy);}
+.upload-zone .uz-s{font-size:11px;color:var(--muted);}
+#v-preview-wrap{display:none;margin-top:16px;border:1px solid var(--beige-dark);border-radius:4px;overflow:hidden;}
+#v-preview-wrap img{width:100%;max-height:360px;object-fit:contain;background:#f0f0f0;display:block;}
+.analyze-btn{width:100%;padding:16px;background:var(--navy);color:var(--white);border:none;border-radius:4px;font-family:'Jost',sans-serif;font-size:12px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;margin-top:20px;transition:.2s;}
+.analyze-btn:hover:not(:disabled){background:var(--navy-mid);}
+.analyze-btn:disabled{opacity:.5;cursor:not-allowed;}
+.gdot{width:5px;height:5px;border-radius:50%;background:var(--gold);}
+.v-spinner{width:32px;height:32px;border:3px solid var(--beige-dark);border-top-color:var(--gold);border-radius:50%;animation:spin .9s linear infinite;margin:0 auto 12px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.v-results{display:none;}
+.verdict-banner{padding:18px 24px;display:flex;align-items:center;gap:14px;}
+.verdict-banner.pass{background:#f0faf4;border-bottom:1px solid #c3e6cb;}
+.verdict-banner.fail{background:#fdf4f4;border-bottom:1px solid #f5c6cb;}
+.verdict-banner.partial{background:#fffbf0;border-bottom:1px solid #ffeeba;}
+.verdict-icon{font-size:28px;}
+.verdict-lbl{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;}
+.verdict-banner.pass .verdict-lbl{color:var(--success);}
+.verdict-banner.fail .verdict-lbl{color:var(--fail);}
+.verdict-banner.partial .verdict-lbl{color:var(--warn);}
+.verdict-sub{font-size:12px;color:#666;margin-top:2px;}
+.checklist{padding:20px 24px;display:flex;flex-direction:column;gap:12px;}
+.chk-item{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;border-radius:4px;border:1px solid transparent;background:var(--white);animation:slideIn .35s ease forwards;opacity:0;transform:translateY(6px);}
+@keyframes slideIn{to{opacity:1;transform:translateY(0);}}
+.chk-item.pass{border-color:#c3e6cb;background:#f8fffe;}
+.chk-item.fail{border-color:#f5c6cb;background:#fffafa;}
+.chk-item.warn{border-color:#ffeeba;background:#fffdf5;}
+.chk-icon{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+.chk-item.pass .chk-icon{background:#d4edda;}
+.chk-item.fail .chk-icon{background:#f8d7da;}
+.chk-item.warn .chk-icon{background:#fff3cd;}
+.chk-title{font-size:12px;font-weight:600;letter-spacing:.04em;margin-bottom:3px;}
+.chk-item.pass .chk-title{color:var(--success);}
+.chk-item.fail .chk-title{color:var(--fail);}
+.chk-item.warn .chk-title{color:var(--warn);}
+.chk-note{font-size:12px;font-weight:300;color:#555;line-height:1.5;}
+.ai-notes-wrap{padding:0 24px 24px;}
+.ai-notes-lbl{font-size:10px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;display:flex;align-items:center;gap:8px;}
+.ai-notes-lbl::after{content:'';flex:1;height:1px;background:var(--beige-dark);}
+.ai-notes-txt{font-size:13px;font-weight:300;line-height:1.7;color:#444;background:var(--white);border:1px solid var(--beige-dark);border-left:3px solid var(--gold);padding:12px 14px;border-radius:0 4px 4px 0;font-style:italic;}
+.reset-verify{display:block;margin:0 24px 24px;padding:11px;background:transparent;border:1px solid var(--beige-dark);border-radius:4px;font-family:'Jost',sans-serif;font-size:11px;font-weight:500;letter-spacing:.15em;text-transform:uppercase;color:#888;cursor:pointer;text-align:center;transition:.2s;width:calc(100% - 48px);}
+.reset-verify:hover{border-color:var(--navy);color:var(--navy);}
+
+/* ── TRADE HISTORY ── */
+.history-table{width:100%;background:var(--cream);border:1px solid var(--beige-dark);border-radius:6px;overflow:hidden;}
+.history-table table{width:100%;border-collapse:collapse;}
+.history-table th{background:var(--navy);color:rgba(255,255,255,.7);font-size:10px;font-weight:500;letter-spacing:.15em;text-transform:uppercase;padding:12px 16px;text-align:left;}
+.history-table td{padding:12px 16px;font-size:13px;border-bottom:1px solid var(--beige-dark);}
+.history-table tr:last-child td{border-bottom:none;}
+.badge{display:inline-block;font-size:10px;font-weight:600;letter-spacing:.08em;padding:3px 9px;border-radius:2px;text-transform:uppercase;}
+.badge.pass{background:#d4edda;color:var(--success);}
+.badge.fail{background:#f8d7da;color:var(--fail);}
+.badge.partial{background:#fff3cd;color:var(--warn);}
+.badge.long{background:#e3f2fd;color:#1565c0;}
+.badge.short{background:#fce4ec;color:#880e4f;}
+
+/* ── SIGNALS PAGE ── */
+.signals-page{max-width:600px;}
+.sig-card{background:var(--cream);border:1px solid var(--beige-dark);border-radius:6px;padding:32px;margin-bottom:20px;text-align:center;}
+.sig-icon{font-size:48px;margin-bottom:16px;}
+.sig-title{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:700;color:var(--navy);margin-bottom:8px;}
+.sig-desc{font-size:13px;font-weight:300;color:var(--muted);line-height:1.7;margin-bottom:24px;}
+.sig-btn{display:inline-flex;align-items:center;gap:10px;padding:14px 28px;border-radius:4px;border:none;font-family:'Jost',sans-serif;font-size:12px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;text-decoration:none;transition:.2s;}
+.sig-btn.whatsapp{background:#25D366;color:#fff;}
+.sig-btn.whatsapp:hover{background:#1ebe57;}
+.sig-btn.telegram{background:#0088cc;color:#fff;}
+.sig-btn.telegram:hover{background:#0077b5;}
+.sig-or{font-size:12px;color:var(--muted);margin:0 16px;}
+.sig-btns{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:12px;}
+
+/* ── SUSPENDED ── */
+.suspended-page{max-width:520px;margin:80px auto;padding:0 24px;text-align:center;}
+.suspended-icon{font-size:56px;margin-bottom:20px;}
+.suspended-page h2{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:700;color:var(--navy);margin-bottom:12px;}
+.suspended-page p{font-size:14px;font-weight:300;color:var(--muted);line-height:1.7;margin-bottom:28px;}
+
+/* ── ADMIN DASHBOARD ── */
+.admin-layout{display:flex;min-height:calc(100vh - 68px);}
+.admin-sidebar{width:230px;background:var(--navy-mid);padding:28px 0;flex-shrink:0;display:flex;flex-direction:column;}
+.admin-sidebar-title{padding:0 20px 24px;border-bottom:1px solid rgba(255,255,255,.08);}
+.ast-label{font-size:9px;font-weight:500;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:4px;}
+.ast-name{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--white);font-weight:600;}
+.admin-nav{margin-top:16px;}
+.admin-nav-item{display:flex;align-items:center;gap:10px;padding:11px 20px;font-size:13px;color:rgba(255,255,255,.6);cursor:pointer;transition:.2s;border-left:3px solid transparent;}
+.admin-nav-item:hover{color:var(--white);background:rgba(255,255,255,.05);}
+.admin-nav-item.active{color:var(--gold-light);border-left-color:var(--gold);background:rgba(184,148,42,.08);}
+.admin-main{flex:1;padding:36px;background:var(--beige);overflow-y:auto;}
+.admin-tab{display:none;}
+.admin-tab.active{display:block;}
+.admin-tab-header{margin-bottom:28px;}
+.admin-tab-header h2{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:700;color:var(--navy);}
+.admin-tab-header p{font-size:13px;color:var(--muted);margin-top:4px;}
+.admin-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px;}
+.a-stat{background:var(--cream);border:1px solid var(--beige-dark);border-radius:6px;padding:18px 20px;}
+.a-stat-lbl{font-size:9px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+.a-stat-val{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:700;color:var(--navy);}
+.a-stat-sub{font-size:11px;color:var(--muted);margin-top:3px;}
+.charts-row{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:28px;}
+.chart-card{background:var(--cream);border:1px solid var(--beige-dark);border-radius:6px;padding:24px;}
+.chart-card h3{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:var(--navy);margin-bottom:20px;}
+.chart-wrap{position:relative;height:220px;}
+.students-table{background:var(--cream);border:1px solid var(--beige-dark);border-radius:6px;overflow:hidden;margin-top:4px;}
+.students-table table{width:100%;border-collapse:collapse;}
+.students-table th{background:var(--navy);color:rgba(255,255,255,.7);font-size:10px;font-weight:500;letter-spacing:.15em;text-transform:uppercase;padding:12px 16px;text-align:left;}
+.students-table td{padding:11px 16px;font-size:13px;border-bottom:1px solid var(--beige-dark);vertical-align:middle;}
+.students-table tr:last-child td{border-bottom:none;}
+.students-table tr:hover td{background:rgba(184,148,42,.03);}
+.toggle-status{font-size:10px;padding:4px 12px;border-radius:2px;border:none;cursor:pointer;font-family:'Jost',sans-serif;font-weight:600;letter-spacing:.08em;text-transform:uppercase;}
+.toggle-status.active{background:#f8d7da;color:var(--fail);}
+.toggle-status.suspended{background:#d4edda;color:var(--success);}
+.criteria-bars{display:flex;flex-direction:column;gap:14px;}
+.crit-bar-row{display:flex;align-items:center;gap:12px;}
+.crit-bar-label{font-size:12px;font-weight:400;color:var(--navy);width:160px;flex-shrink:0;}
+.crit-bar-track{flex:1;background:var(--beige-dark);border-radius:2px;height:10px;overflow:hidden;}
+.crit-bar-fill{height:100%;border-radius:2px;background:var(--gold);transition:width .8s ease;}
+.crit-bar-fill.fail{background:#e57373;}
+.crit-bar-pct{font-size:11px;font-weight:600;color:var(--navy);width:36px;text-align:right;}
+.search-bar{padding:10px 14px;border:1px solid var(--beige-dark);border-radius:4px;font-family:'Jost',sans-serif;font-size:13px;width:280px;outline:none;margin-bottom:16px;}
+.search-bar:focus{border-color:var(--gold);}
+
+
+
+/* ── MISC ── */
+.gold-line{width:48px;height:2px;background:var(--gold);margin:0 auto 32px;}
+.btn-gold{padding:14px 32px;background:var(--gold);color:var(--navy);border:none;border-radius:4px;font-family:'Jost',sans-serif;font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;transition:.2s;}
+.btn-gold:hover{background:var(--gold-light);}
+.btn-navy{padding:14px 32px;background:var(--navy);color:var(--white);border:none;border-radius:4px;font-family:'Jost',sans-serif;font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;transition:.2s;}
+.empty-state{text-align:center;padding:48px 24px;color:var(--muted);}
+.empty-state .es-icon{font-size:40px;margin-bottom:12px;}
+.empty-state p{font-size:14px;font-weight:300;}
+
+@media(max-width:768px){
+  .plans-grid{grid-template-columns:1fr;}
+  .dash-layout,.admin-layout{flex-direction:column;}
+  .dash-sidebar,.admin-sidebar{width:100%;}
+  .admin-stats{grid-template-columns:repeat(2,1fr);}
+  .charts-row{grid-template-columns:1fr;}
+  .stats-row{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════ NAV ══════════ -->
+<nav id="main-nav">
+  <div class="nav-logo" onclick="goHome()">
+    <svg width="40" height="40" viewBox="0 0 44 44" fill="none">
+      <circle cx="22" cy="22" r="21" stroke="rgba(184,148,42,0.3)" stroke-width="1"/>
+      <path d="M8 22 Q12 10 22 10 Q32 10 36 22" stroke="#1a4080" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <path d="M8 25 Q12 13 22 13 Q32 13 36 25" stroke="#1a4080" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.7"/>
+      <path d="M10 28 Q14 18 22 18 Q30 18 34 28" stroke="#b8942a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <path d="M34 25 L38 22 L34 19" stroke="#1a4080" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M34 28 L38 25 L34 22" stroke="#b8942a" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <div class="nav-logo-text">
+      <span class="top">World Shifters</span>
+      <span class="bot">Institute</span>
+    </div>
+  </div>
+  <div class="nav-right" id="nav-right">
+    <button class="nav-btn" onclick="showView('login')">Log In</button>
+    <button class="nav-btn primary" onclick="showView('landing')">Get Started</button>
+  </div>
+</nav>
+
+<!-- ══════════ LANDING ══════════ -->
+<div class="view active" id="view-landing">
+  <div class="hero">
+    <p class="hero-eye">Trading Strategy Platform</p>
+    <h1>Luke <span>Five</span><br>Verification System</h1>
+    <p>Verify your trades, receive coach signals, and master the Luke 5 strategy with our professional-grade platform.</p>
+    <div class="hero-divider"></div>
+    <button class="btn-gold" onclick="scrollToPlans()">Choose Your Plan ↓</button>
+  </div>
+
+  <div class="plans-section" id="plans-section">
+    <p class="section-label">Membership Options</p>
+    <h2 class="section-title">Select Your Trading Journey</h2>
+    <div class="plans-grid">
+
+      <div class="plan-card" onclick="selectPlan('solo')">
+        <div class="plan-header">
+          <div class="plan-name">Solo Trader</div>
+          <div class="plan-tagline">Do it for myself</div>
+        </div>
+        <div class="plan-price">
+          <div class="plan-amount"><sup>$</sup>29<sub>/mo</sub></div>
+        </div>
+        <ul class="plan-features">
+          <li><span class="fi">✓</span> Luke 5 Verifier Tool</li>
+          <li><span class="fi">✓</span> AI Chart Analysis</li>
+          <li><span class="fi">✓</span> Trade History Log</li>
+          <li><span class="fi">✓</span> Performance Stats</li>
+          <li><span class="fx">–</span> Coach Signals</li>
+          <li><span class="fx">–</span> WhatsApp / Telegram Access</li>
+        </ul>
+        <button class="plan-cta">Get Started</button>
+      </div>
+
+      <div class="plan-card featured" onclick="selectPlan('signal')">
+        <div class="plan-badge">Popular</div>
+        <div class="plan-header">
+          <div class="plan-name">Signal Subscriber</div>
+          <div class="plan-tagline">Get signals from coach</div>
+        </div>
+        <div class="plan-price">
+          <div class="plan-amount"><sup>$</sup>49<sub>/mo</sub></div>
+        </div>
+        <ul class="plan-features">
+          <li><span class="fi">✓</span> Coach Trade Signals</li>
+          <li><span class="fi">✓</span> WhatsApp Group Access</li>
+          <li><span class="fi">✓</span> Telegram Channel Access</li>
+          <li><span class="fi">✓</span> Signal History</li>
+          <li><span class="fx">–</span> Luke 5 Verifier Tool</li>
+          <li><span class="fx">–</span> AI Chart Analysis</li>
+        </ul>
+        <button class="plan-cta">Get Started</button>
+      </div>
+
+      <div class="plan-card" onclick="selectPlan('full')">
+        <div class="plan-header">
+          <div class="plan-name">Full Access</div>
+          <div class="plan-tagline">Both — complete experience</div>
+        </div>
+        <div class="plan-price">
+          <div class="plan-amount"><sup>$</sup>79<sub>/mo</sub></div>
+        </div>
+        <ul class="plan-features">
+          <li><span class="fi">✓</span> Luke 5 Verifier Tool</li>
+          <li><span class="fi">✓</span> AI Chart Analysis</li>
+          <li><span class="fi">✓</span> Trade History Log</li>
+          <li><span class="fi">✓</span> Coach Trade Signals</li>
+          <li><span class="fi">✓</span> WhatsApp Group Access</li>
+          <li><span class="fi">✓</span> Telegram Channel Access</li>
+        </ul>
+        <button class="plan-cta">Get Started</button>
+      </div>
+
+    </div>
+  </div>
+
+  <footer style="text-align:center;padding:24px;font-size:11px;color:rgba(13,31,60,.4);letter-spacing:.1em;border-top:1px solid var(--beige-dark);">
+    &copy; 2025 <span style="color:var(--gold)">World Shifters Institute</span> &nbsp;·&nbsp; Luke 5 Platform
+  </footer>
+</div>
+
+<!-- ══════════ REGISTER ══════════ -->
+<div class="view" id="view-register">
+  <div class="form-page">
+    <div style="text-align:center;margin-bottom:28px;">
+      <p style="font-size:10px;font-weight:500;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;">Create Account</p>
+      <h2 style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:700;color:var(--navy);">Join World Shifters</h2>
+    </div>
+    <div class="form-card">
+      <div class="form-header">
+        <h2>Registration</h2>
+        <p id="reg-plan-label">Selected plan: —</p>
+      </div>
+      <div class="form-body">
+        <div id="reg-error" class="form-error"></div>
+        <div class="form-row">
+          <div class="form-group"><label>First Name</label><input type="text" id="reg-first" placeholder="Amanda"></div>
+          <div class="form-group"><label>Last Name</label><input type="text" id="reg-last" placeholder="Smith"></div>
+        </div>
+        <div class="form-group"><label>Email Address</label><input type="email" id="reg-email" placeholder="you@email.com"></div>
+        <div class="form-group"><label>Password</label><input type="password" id="reg-pass" placeholder="Create a password"></div>
+        <div class="form-group"><label>Confirm Password</label><input type="password" id="reg-pass2" placeholder="Repeat password"></div>
+        <button class="form-submit" onclick="doRegister()">Continue to Payment →</button>
+      </div>
+      <div class="form-footer">Already have an account? <a onclick="showView('login')">Log in here</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ PAYMENT ══════════ -->
+<div class="view" id="view-payment">
+  <div class="form-page">
+    <div style="text-align:center;margin-bottom:28px;">
+      <p style="font-size:10px;font-weight:500;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;">Secure Checkout</p>
+      <h2 style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:700;color:var(--navy);">Payment Details</h2>
+    </div>
+    <div class="form-card">
+      <div class="form-header">
+        <h2>Complete Your Subscription</h2>
+        <p>Powered by Square — secure & encrypted</p>
+      </div>
+      <div class="form-body">
+        <div id="payment-plan-summary" class="plan-summary"></div>
+        <div class="square-notice">
+          <strong>⚙️ Developer Setup Required</strong>
+          Replace <code>YOUR_SQUARE_APP_ID</code> and <code>YOUR_SQUARE_LOCATION_ID</code> with your Square sandbox/production credentials. A backend endpoint is needed to complete charging via Square's Payments API.
+        </div>
+        <div id="pay-error" class="form-error"></div>
+        <div class="card-form-placeholder">
+          <span class="sq-label">Card Details</span>
+          <div id="square-card-container">
+            <!-- Square Web Payments SDK mounts here -->
+            <div style="padding:20px;text-align:center;color:var(--muted);font-size:13px;">
+              🔒 Square card form loads here once App ID is configured
+            </div>
+          </div>
+        </div>
+        <button class="form-submit" id="pay-btn" onclick="doPayment()">
+          Activate Subscription &amp; Enter →
+        </button>
+        <p style="text-align:center;font-size:11px;color:var(--muted);margin-top:12px;line-height:1.6;">
+          Your subscription auto-renews monthly. Cancel anytime. Access is immediately revoked if payment fails.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ LOGIN ══════════ -->
+<div class="view" id="view-login">
+  <div class="form-page">
+    <div style="text-align:center;margin-bottom:28px;">
+      <p style="font-size:10px;font-weight:500;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;">Welcome Back</p>
+      <h2 style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:700;color:var(--navy);">Log In</h2>
+    </div>
+    <div class="form-card">
+      <div class="form-header"><h2>Member Login</h2><p>World Shifters Institute</p></div>
+      <div class="form-body">
+        <div id="login-error" class="form-error"></div>
+        <div class="form-group"><label>Email Address</label><input type="email" id="login-email" placeholder="you@email.com" onkeydown="if(event.key==='Enter')doLogin()"></div>
+        <div class="form-group"><label>Password</label><input type="password" id="login-pass" placeholder="Your password" onkeydown="if(event.key==='Enter')doLogin()"></div>
+        <button class="form-submit" onclick="doLogin()">Log In →</button>
+      </div>
+      <div class="form-footer">
+        Don't have an account? <a onclick="showView('landing')">Choose a plan</a><br>
+        <a onclick="adminLogin()" style="font-size:11px;color:var(--muted);">Admin access</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ SUSPENDED ══════════ -->
+<div class="view" id="view-suspended">
+  <div class="suspended-page">
+    <div class="suspended-icon">🔒</div>
+    <h2>Account Suspended</h2>
+    <p>Your subscription has lapsed or been suspended. Please update your payment method to restore access to the Luke 5 platform.</p>
+    <button class="btn-gold" onclick="showView('payment')" style="margin-right:12px;">Reactivate →</button>
+    <button class="btn-navy" onclick="doLogout()">Log Out</button>
+  </div>
+</div>
+
+<!-- ══════════ STUDENT DASHBOARD ══════════ -->
+<div class="view" id="view-student">
+  <div class="dash-layout">
+    <div class="dash-sidebar">
+      <div class="dash-sidebar-user">
+        <div class="ds-name" id="ds-name">—</div>
+        <div class="ds-plan" id="ds-plan">—</div>
+        <div class="ds-status active" id="ds-status">● Active</div>
+      </div>
+      <div class="dash-nav">
+        <div class="dash-nav-item active" id="dnav-overview" onclick="showDashTab('overview')"><span class="ni">📊</span> Overview</div>
+        <div class="dash-nav-item" id="dnav-verifier" onclick="showDashTab('verifier')"><span class="ni">✅</span> Verify Trade</div>
+        <div class="dash-nav-item" id="dnav-signals" onclick="showDashTab('signals')"><span class="ni">📡</span> Coach Signals</div>
+        <div class="dash-nav-item" id="dnav-history" onclick="showDashTab('history')"><span class="ni">📋</span> Trade History</div>
+      </div>
+      <div style="position:absolute;bottom:24px;left:0;right:0;padding:0 20px;">
+        <button onclick="doLogout()" style="width:100%;padding:10px;background:transparent;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.5);font-family:'Jost',sans-serif;font-size:11px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;border-radius:3px;transition:.2s;" onmouseover="this.style.borderColor='rgba(255,255,255,.4)'" onmouseout="this.style.borderColor='rgba(255,255,255,.15)'">Log Out</button>
+      </div>
+    </div>
+    <div class="dash-main">
+
+      <!-- OVERVIEW TAB -->
+      <div class="dash-tab active" id="dtab-overview">
+        <div class="dash-header">
+          <h2 id="dash-welcome">Welcome back</h2>
+          <p>Your Luke 5 performance at a glance</p>
+        </div>
+        <div class="stats-row">
+          <div class="stat-card"><div class="stat-label">Total Verifications</div><div class="stat-value" id="s-total">0</div><div class="stat-sub">all time</div></div>
+          <div class="stat-card"><div class="stat-label">Confirmed Setups</div><div class="stat-value" id="s-pass">0</div><div class="stat-sub">fully verified</div></div>
+          <div class="stat-card"><div class="stat-label">Accuracy Rate</div><div class="stat-value" id="s-rate">—</div><div class="stat-sub">pass / total</div></div>
+        </div>
+        <div style="background:var(--cream);border:1px solid var(--beige-dark);border-radius:6px;padding:24px;max-width:480px;">
+          <p style="font-size:10px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;">Criteria Breakdown</p>
+          <div id="student-criteria-bars" class="criteria-bars"></div>
+        </div>
+      </div>
+
+      <!-- VERIFIER TAB -->
+      <div class="dash-tab" id="dtab-verifier">
+        <div class="dash-header"><h2>Verify a Trade</h2><p>Upload your chart and check all Luke 5 criteria</p></div>
+        <div id="api-key-banner" style="display:none;background:#fffbf0;border:1px solid #ffeeba;border-radius:6px;padding:14px 18px;margin-bottom:20px;font-size:13px;color:var(--warn);line-height:1.6;">
+          <strong>⚠️ AI Analysis not configured.</strong><br>
+          Admin: open <strong>index.html</strong>, paste your Anthropic API key into <code>ANTHROPIC_API_KEY</code> at the top of the script, then re-upload to GitHub. This fixes it for <em>all</em> students on all devices automatically.
+        </div>
+        <div class="verifier-wrap">
+          <div class="v-card">
+            <div class="v-card-header"><div class="v-step">1</div><h3>Select Direction</h3></div>
+            <div class="v-card-body">
+              <div class="dir-grid">
+                <button class="dir-btn" id="v-btn-long" onclick="vSetDir('long')">
+                  <span style="font-size:24px">📈</span>
+                  <span class="dlbl">Long</span>
+                  <span class="dsub">Bullish — Higher Highs</span>
+                </button>
+                <button class="dir-btn" id="v-btn-short" onclick="vSetDir('short')">
+                  <span style="font-size:24px">📉</span>
+                  <span class="dlbl">Short</span>
+                  <span class="dsub">Bearish — Lower Lows</span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="v-card">
+            <div class="v-card-header"><div class="v-step">2</div><h3>Select Timeframe</h3></div>
+            <div class="v-card-body">
+              <div class="tf-grid">
+                <button class="tf-btn" id="tf-1H" onclick="vSetTF('1H')"><span class="tf-lbl">1H</span><span class="tf-sub">1 Hour</span></button>
+                <button class="tf-btn" id="tf-4H" onclick="vSetTF('4H')"><span class="tf-lbl">4H</span><span class="tf-sub">4 Hour</span></button>
+                <button class="tf-btn" id="tf-1D" onclick="vSetTF('1D')"><span class="tf-lbl">1D</span><span class="tf-sub">Daily</span></button>
+                <button class="tf-btn" id="tf-1W" onclick="vSetTF('1W')"><span class="tf-lbl">1W</span><span class="tf-sub">Weekly</span></button>
+              </div>
+            </div>
+          </div>
+          <div class="v-card">
+            <div class="v-card-header"><div class="v-step">3</div><h3>Upload Chart Screenshot</h3></div>
+            <div class="v-card-body">
+              <div class="upload-zone" id="v-upload-zone">
+                <input type="file" id="v-file-input" accept="image/*" onchange="vHandleFile(event)">
+                <span class="uz-icon">📷</span>
+                <p class="uz-p">Drop your chart screenshot here</p>
+                <p class="uz-s">or click to browse — PNG, JPG, WEBP</p>
+              </div>
+              <div id="v-preview-wrap"><img id="v-preview-img" src="" alt="Chart preview"></div>
+              <div class="form-error" id="v-error"></div>
+              <button class="analyze-btn" id="v-analyze-btn" onclick="vAnalyze()" disabled>
+                <span class="gdot"></span>Verify Luke 5 Strategy<span class="gdot"></span>
+              </button>
+            </div>
+          </div>
+          <div class="v-card" id="v-loading-card" style="display:none;">
+            <div style="text-align:center;padding:32px;">
+              <div class="v-spinner"></div>
+              <p style="font-family:'Cormorant Garamond',serif;font-size:18px;font-style:italic;color:var(--navy);">Analyzing your chart…</p>
+              <p style="font-size:12px;color:var(--muted);margin-top:4px;">Checking Luke 5 criteria</p>
+            </div>
+          </div>
+          <div class="v-card v-results" id="v-results-card">
+            <div id="v-verdict-banner"></div>
+            <div class="checklist" id="v-checklist"></div>
+            <div class="ai-notes-wrap">
+              <div class="ai-notes-lbl">Analyst Notes</div>
+              <div class="ai-notes-txt" id="v-ai-notes"></div>
+            </div>
+            <button class="reset-verify" onclick="vReset()">↺ &nbsp;Verify Another Trade</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SIGNALS TAB -->
+      <div class="dash-tab" id="dtab-signals">
+        <div class="dash-header"><h2>Coach Signals</h2><p>Join your preferred platform to receive live trade signals</p></div>
+        <div class="signals-page">
+          <div class="sig-card">
+            <div class="sig-icon">💬</div>
+            <div class="sig-title">WhatsApp Signal Group</div>
+            <div class="sig-desc">Join our private WhatsApp group to receive real-time trade signals directly from your coach. Signals include entry, target, and stop loss levels.</div>
+            <div class="sig-btns">
+              <a href="https://wa.me/YOUR_WHATSAPP_LINK" target="_blank" class="sig-btn whatsapp">
+                <span>📱</span> Join WhatsApp Group
+              </a>
+            </div>
+          </div>
+          <div class="sig-card">
+            <div class="sig-icon">✈️</div>
+            <div class="sig-title">Telegram Channel</div>
+            <div class="sig-desc">Subscribe to the World Shifters Telegram channel for signals, market analysis, and coaching updates — available 24/7 on any device.</div>
+            <div class="sig-btns">
+              <a href="https://t.me/YOUR_TELEGRAM_LINK" target="_blank" class="sig-btn telegram">
+                <span>📡</span> Join Telegram Channel
+              </a>
+            </div>
+          </div>
+          <p style="text-align:center;font-size:12px;color:var(--muted);font-weight:300;">Replace the links above with your actual WhatsApp group invite and Telegram channel URL.</p>
+        </div>
+      </div>
+
+      <!-- HISTORY TAB -->
+      <div class="dash-tab" id="dtab-history">
+        <div class="dash-header"><h2>Trade History</h2><p>All your Luke 5 verifications</p></div>
+        <div id="history-content"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ ADMIN LOGIN ══════════ -->
+<div class="view" id="view-admin-login">
+  <div class="form-page" style="padding-top:80px;">
+    <div class="form-card">
+      <div class="form-header"><h2>Admin Access</h2><p>World Shifters Institute</p></div>
+      <div class="form-body">
+        <div id="admin-login-error" class="form-error"></div>
+        <div class="form-group">
+          <label>Admin Password</label>
+          <div style="position:relative;">
+            <input type="password" id="admin-pass-input" placeholder="Enter admin password" 
+              autocorrect="off" autocapitalize="off" autocomplete="off" spellcheck="false"
+              onkeydown="if(event.key==='Enter')doAdminLogin()"
+              style="width:100%;padding:12px 44px 12px 14px;border:1px solid var(--beige-dark);border-radius:4px;font-family:'Jost',sans-serif;font-size:14px;color:var(--navy);outline:none;">
+            <button type="button" onclick="toggleAdminPw()" id="pw-toggle"
+              style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:16px;color:var(--muted);">👁</button>
+          </div>
+          <p style="font-size:11px;color:var(--muted);margin-top:6px;">Tip: password is all lowercase, no spaces</p>
+        </div>
+        <button class="form-submit" onclick="doAdminLogin()">Access Dashboard →</button>
+      </div>
+      <div class="form-footer"><a onclick="showView('login')">← Back to member login</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ ADMIN DASHBOARD ══════════ -->
+<div class="view" id="view-admin">
+  <div class="admin-layout">
+    <div class="admin-sidebar">
+      <div class="admin-sidebar-title">
+        <div class="ast-label">Administrator</div>
+        <div class="ast-name">WSI Dashboard</div>
+      </div>
+      <div class="admin-nav">
+        <div class="admin-nav-item active" id="anav-overview" onclick="showAdminTab('overview')"><span style="font-size:15px">📊</span> &nbsp;Overview</div>
+        <div class="admin-nav-item" id="anav-students" onclick="showAdminTab('students')"><span style="font-size:15px">👥</span> &nbsp;Students</div>
+        <div class="admin-nav-item" id="anav-analytics" onclick="showAdminTab('analytics')"><span style="font-size:15px">📈</span> &nbsp;Analytics</div>
+        <div class="admin-nav-item" id="anav-settings" onclick="showAdminTab('settings')"><span style="font-size:15px">⚙️</span> &nbsp;Settings</div>
+      </div>
+      <div style="padding:24px 16px 24px;margin-top:16px;">
+        <button onclick="doAdminLogout()" style="width:100%;padding:10px;background:transparent;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.5);font-family:'Jost',sans-serif;font-size:11px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;border-radius:3px;">Log Out</button>
+      </div>
+    </div>
+    <div class="admin-main">
+
+      <!-- OVERVIEW TAB -->
+      <div class="admin-tab active" id="atab-overview">
+        <div class="admin-tab-header"><h2>Platform Overview</h2><p>Real-time membership and accuracy metrics</p></div>
+        <div class="admin-stats" id="admin-stats-row"></div>
+        <div class="charts-row">
+          <div class="chart-card"><h3>Members by Plan</h3><div class="chart-wrap"><canvas id="chart-plans"></canvas></div></div>
+          <div class="chart-card"><h3>Verification Results</h3><div class="chart-wrap"><canvas id="chart-results"></canvas></div></div>
+        </div>
+        <div style="background:var(--cream);border:1px solid var(--beige-dark);border-radius:6px;padding:24px;">
+          <p style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--navy);margin-bottom:20px;">Where Students Are Falling Short</p>
+          <p style="font-size:12px;color:var(--muted);margin-bottom:20px;font-weight:300;">Failure rate per Luke 5 criterion — use this to target your training content</p>
+          <div id="admin-criteria-bars" class="criteria-bars"></div>
+        </div>
+      </div>
+
+      <!-- STUDENTS TAB -->
+      <div class="admin-tab" id="atab-students">
+        <div class="admin-tab-header"><h2>Student Management</h2><p>View, suspend, or reactivate member accounts</p></div>
+        <input class="search-bar" id="student-search" placeholder="Search by name or email…" oninput="renderStudentsTable()">
+        <div class="students-table" id="students-table-wrap"></div>
+      </div>
+
+      <!-- ANALYTICS TAB -->
+      <div class="admin-tab" id="atab-analytics">
+        <div class="admin-tab-header"><h2>Training Analytics</h2><p>Detailed breakdown to guide your curriculum</p></div>
+        <div class="charts-row">
+          <div class="chart-card"><h3>Daily Verifications (Last 14 Days)</h3><div class="chart-wrap"><canvas id="chart-daily"></canvas></div></div>
+          <div class="chart-card"><h3>Accuracy by Plan</h3><div class="chart-wrap"><canvas id="chart-plan-accuracy"></canvas></div></div>
+        </div>
+        <div style="background:var(--cream);border:1px solid var(--beige-dark);border-radius:6px;padding:24px;margin-top:4px;">
+          <p style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--navy);margin-bottom:20px;">Training Recommendations</p>
+          <div id="training-recs"></div>
+        </div>
+      </div>
+
+      <!-- SETTINGS TAB -->
+      <div class="admin-tab" id="atab-settings">
+        <div class="admin-tab-header"><h2>Platform Settings</h2><p>Configure your Anthropic API key to enable AI chart analysis</p></div>
+        <div style="max-width:560px;">
+          <div style="background:var(--cream);border:1px solid var(--beige-dark);border-radius:6px;overflow:hidden;">
+            <div style="background:var(--navy);padding:18px 24px;">
+              <p style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--white);">Anthropic API Key</p>
+              <p style="font-size:12px;color:rgba(255,255,255,.5);margin-top:3px;">Required for AI-powered chart analysis</p>
+            </div>
+            <div style="padding:28px;">
+              <div style="background:#f0faf4;border:1px solid #c3e6cb;border-radius:4px;padding:16px;margin-bottom:20px;font-size:13px;color:var(--success);line-height:1.7;">
+                <strong style="display:block;margin-bottom:6px;font-size:14px;">✅ Recommended: Bake the key into the file</strong>
+                This makes AI analysis work for <strong>every student on every device</strong> automatically.<br><br>
+                <strong>Step 1</strong> — Download your <code>index.html</code> from GitHub<br>
+                <strong>Step 2</strong> — Open it in a text editor (Notepad on Windows, TextEdit on Mac)<br>
+                <strong>Step 3</strong> — Find this line near the top of the &lt;script&gt;:<br>
+                <code style="display:block;background:rgba(0,0,0,.06);padding:8px 10px;border-radius:3px;margin:8px 0;font-size:12px;">const ANTHROPIC_API_KEY = 'sk-ant-api03-...';</code
+';</code>
+                <strong>Step 4</strong> — Paste your key between the quotes:<br>
+                <code style="display:block;background:rgba(0,0,0,.06);padding:8px 10px;border-radius:3px;margin:8px 0;font-size:12px;">const ANTHROPIC_API_KEY = 'sk-ant-api03-...';</code>
+                <strong>Step 5</strong> — Save and re-upload to GitHub. Done!
+              </div>
+              <div style="background:#fffbf0;border:1px solid #ffeeba;border-radius:4px;padding:14px 16px;margin-bottom:20px;font-size:12px;color:var(--warn);line-height:1.6;">
+                <strong>Alternative: Save for this browser only</strong><br>
+                Use the field below to save the key in this browser only. You'll need to repeat this on every device.
+              </div>
+              <div id="api-key-status" style="margin-bottom:16px;display:none;"></div>
+              <label style="font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--navy);display:block;margin-bottom:8px;">API Key (this browser only)</label>
+              <input type="password" id="api-key-input" placeholder="sk-ant-api03-..." style="width:100%;padding:12px 14px;border:1px solid var(--beige-dark);border-radius:4px;font-family:'Jost',sans-serif;font-size:14px;color:var(--navy);outline:none;margin-bottom:16px;">
+              <div style="display:flex;gap:12px;">
+                <button onclick="saveApiKey()" style="flex:1;padding:13px;background:var(--navy);color:var(--white);border:none;border-radius:4px;font-family:'Jost',sans-serif;font-size:12px;font-weight:500;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;">Save for This Browser</button>
+                <button onclick="clearApiKey()" style="padding:13px 20px;background:transparent;border:1px solid var(--beige-dark);border-radius:4px;font-family:'Jost',sans-serif;font-size:12px;color:var(--muted);cursor:pointer;letter-spacing:.1em;text-transform:uppercase;">Clear</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════
+// ADMIN SETUP: Paste your Anthropic API key below
+// Get your key at: console.anthropic.com → API Keys
+// After updating, re-upload this file to GitHub
+// ══════════════════════════════════════════════════
+const ANTHROPIC_API_KEY = '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';
+// ══════════════════════════════════════════════════
+
+// ══════════ DATA LAYER ══════════
+const DB = {
+  getUsers(){ return JSON.parse(localStorage.getItem('wsi_users')||'[]'); },
+  saveUsers(u){ localStorage.setItem('wsi_users',JSON.stringify(u)); },
+  getTrades(){ return JSON.parse(localStorage.getItem('wsi_trades')||'[]'); },
+  saveTrades(t){ localStorage.setItem('wsi_trades',JSON.stringify(t)); },
+  getSession(){ return JSON.parse(localStorage.getItem('wsi_sess')||'null'); },
+  saveSession(s){ localStorage.setItem('wsi_sess',JSON.stringify(s)); },
+  clearSession(){ localStorage.removeItem('wsi_sess'); },
+  addTrade(trade){ const t=DB.getTrades(); t.push(trade); DB.saveTrades(t); },
+  getUserById(id){ return DB.getUsers().find(u=>u.id===id); },
+  updateUser(updated){ const users=DB.getUsers(); const i=users.findIndex(u=>u.id===updated.id); if(i>=0){users[i]=updated;DB.saveUsers(users);} }
+};
+
+const ADMIN_PASSWORD = 'worldshifters2025';
+const PLANS = {
+  solo:   { name:'Solo Trader',       price:'$29/mo', features:['verifier'] },
+  signal: { name:'Signal Subscriber', price:'$49/mo', features:['signals'] },
+  full:   { name:'Full Access',       price:'$79/mo', features:['verifier','signals'] }
+};
+
+let selectedPlan = null;
+let pendingUser  = null;
+let vDirection   = null;
+let vTimeframe   = null;
+let vImageBase64 = null;
+let vImageType   = null;
+let adminCharts  = {};
+
+// ══════════ SEED DEMO DATA ══════════
+function seedDemoData(){
+  if(DB.getUsers().length > 0) return;
+  const users = [
+    {id:'u1',first:'James',last:'Carter',email:'james@demo.com',password:'demo',plan:'full',status:'active',joined:'2025-01-15'},
+    {id:'u2',first:'Maya',last:'Johnson',email:'maya@demo.com',password:'demo',plan:'solo',status:'active',joined:'2025-02-03'},
+    {id:'u3',first:'Trey',last:'Williams',email:'trey@demo.com',password:'demo',plan:'signal',status:'active',joined:'2025-02-18'},
+    {id:'u4',first:'Sofia',last:'Rivera',email:'sofia@demo.com',password:'demo',plan:'full',status:'active',joined:'2025-03-01'},
+    {id:'u5',first:'Marcus',last:'Brown',email:'marcus@demo.com',password:'demo',plan:'solo',status:'suspended',joined:'2025-03-10'},
+    {id:'u6',first:'Aisha',last:'Thompson',email:'aisha@demo.com',password:'demo',plan:'full',status:'active',joined:'2025-03-22'},
+  ];
+  DB.saveUsers(users);
+
+  const directions = ['long','short'];
+  const results    = ['pass','fail','partial'];
+  const statuses   = ['pass','fail','unclear'];
+  const trades = [];
+  const now = new Date();
+  users.forEach(u => {
+    const count = 8 + Math.floor(Math.random()*12);
+    for(let i=0;i<count;i++){
+      const d = new Date(now - Math.random()*30*24*60*60*1000);
+      const overall = results[Math.floor(Math.random()*3)];
+      trades.push({
+        id:'t'+Math.random().toString(36).slice(2),
+        userId:u.id,
+        date:d.toISOString(),
+        direction:directions[Math.floor(Math.random()*2)],
+        c1:overall==='pass'?'pass':statuses[Math.floor(Math.random()*3)],
+        c2:overall==='pass'?'pass':statuses[Math.floor(Math.random()*3)],
+        c3:overall==='pass'?'pass':statuses[Math.floor(Math.random()*3)],
+        overall,
+        note:'Demo trade analysis.'
+      });
+    }
+  });
+  DB.saveTrades(trades);
+}
+seedDemoData();
+
+// ══════════ NAVIGATION ══════════
+function showView(v){
+  document.querySelectorAll('.view').forEach(el=>el.classList.remove('active'));
+  document.getElementById('view-'+v).classList.add('active');
+  window.scrollTo(0,0);
+  updateNav(v);
+}
+
+function updateNav(v){
+  const sess = DB.getSession();
+  const nr = document.getElementById('nav-right');
+  if(sess && sess.isAdmin){
+    nr.innerHTML=`<span class="nav-user">Admin</span><button class="nav-btn" onclick="doAdminLogout()">Log Out</button>`;
+  } else if(sess && sess.userId){
+    const u = DB.getUserById(sess.userId);
+    if(u) nr.innerHTML=`<span class="nav-user">${u.first} ${u.last}</span><span class="nav-badge">${PLANS[u.plan].name}</span><button class="nav-btn" onclick="doLogout()">Log Out</button>`;
+  } else {
+    nr.innerHTML=`<button class="nav-btn" onclick="showView('login')">Log In</button><button class="nav-btn primary" onclick="showView('landing')">Get Started</button>`;
+  }
+}
+
+function goHome(){
+  const sess = DB.getSession();
+  if(sess&&sess.isAdmin) showView('admin');
+  else if(sess&&sess.userId) showView('student');
+  else showView('landing');
+}
+
+function scrollToPlans(){
+  document.getElementById('plans-section').scrollIntoView({behavior:'smooth'});
+}
+
+function adminLogin(){ showView('admin-login'); }
+
+// ══════════ PLAN SELECTION ══════════
+function selectPlan(p){
+  selectedPlan = p;
+  document.getElementById('reg-plan-label').textContent = `Selected plan: ${PLANS[p].name} — ${PLANS[p].price}`;
+  showView('register');
+}
+
+// ══════════ REGISTRATION ══════════
+function doRegister(){
+  const first=document.getElementById('reg-first').value.trim();
+  const last=document.getElementById('reg-last').value.trim();
+  const email=document.getElementById('reg-email').value.trim().toLowerCase();
+  const pass=document.getElementById('reg-pass').value;
+  const pass2=document.getElementById('reg-pass2').value;
+  const err=document.getElementById('reg-error');
+  err.style.display='none';
+
+  if(!first||!last||!email||!pass){err.textContent='Please fill in all fields.';err.style.display='block';return;}
+  if(pass!==pass2){err.textContent='Passwords do not match.';err.style.display='block';return;}
+  if(pass.length<6){err.textContent='Password must be at least 6 characters.';err.style.display='block';return;}
+  const users=DB.getUsers();
+  if(users.find(u=>u.email===email)){err.textContent='An account with this email already exists.';err.style.display='block';return;}
+  if(!selectedPlan){err.textContent='No plan selected. Please go back and choose a plan.';err.style.display='block';return;}
+
+  pendingUser={id:'u'+Date.now(),first,last,email,password:pass,plan:selectedPlan,status:'active',joined:new Date().toISOString()};
+  const ps=PLANS[selectedPlan];
+  document.getElementById('payment-plan-summary').innerHTML=`<div class="ps-name">${ps.name}</div><div class="ps-price">${ps.price}</div>`;
+  showView('payment');
+}
+
+// ══════════ PAYMENT ══════════
+function doPayment(){
+  // In production: tokenize with Square SDK, send token + user data to backend
+  // For prototype: directly activate account
+  if(!pendingUser) return;
+  const users=DB.getUsers();
+  users.push(pendingUser);
+  DB.saveUsers(users);
+  DB.saveSession({userId:pendingUser.id});
+  pendingUser=null;
+  enterStudentDashboard();
+}
+
+// ══════════ LOGIN ══════════
+function doLogin(){
+  const email=document.getElementById('login-email').value.trim().toLowerCase();
+  const pass=document.getElementById('login-pass').value;
+  const err=document.getElementById('login-error');
+  err.style.display='none';
+  const user=DB.getUsers().find(u=>u.email===email&&u.password===pass);
+  if(!user){err.textContent='Invalid email or password.';err.style.display='block';return;}
+  DB.saveSession({userId:user.id});
+  if(user.status==='suspended'){showView('suspended');updateNav('suspended');return;}
+  enterStudentDashboard();
+}
+
+function doLogout(){
+  DB.clearSession();
+  showView('landing');
+  updateNav('landing');
+}
+
+// ══════════ STUDENT DASHBOARD ══════════
+function enterStudentDashboard(){
+  const sess=DB.getSession();
+  if(!sess||!sess.userId) return showView('login');
+  const user=DB.getUserById(sess.userId);
+  if(!user) return showView('login');
+  if(user.status==='suspended'){showView('suspended');updateNav('suspended');return;}
+
+  // Show API key warning banner if not set on this device
+  const keyBanner = document.getElementById('api-key-banner');
+  if(keyBanner){
+    keyBanner.style.display = (ANTHROPIC_API_KEY || localStorage.getItem('wsi_api_key')) ? 'none' : 'block';
+  }
+  document.getElementById('ds-name').textContent=`${user.first} ${user.last}`;
+  document.getElementById('ds-plan').textContent=PLANS[user.plan].name;
+  document.getElementById('dash-welcome').textContent=`Welcome back, ${user.first}`;
+
+  // Show/hide nav items based on plan
+  const hasVerifier = PLANS[user.plan].features.includes('verifier');
+  const hasSignals  = PLANS[user.plan].features.includes('signals');
+  document.getElementById('dnav-verifier').style.display = hasVerifier?'flex':'none';
+  document.getElementById('dnav-signals').style.display  = hasSignals?'flex':'none';
+
+  updateStudentStats(user.id);
+  renderTradeHistory(user.id);
+  showView('student');
+  updateNav('student');
+}
+
+function showDashTab(tab){
+  document.querySelectorAll('.dash-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.dash-nav-item').forEach(i=>i.classList.remove('active'));
+  document.getElementById('dtab-'+tab).classList.add('active');
+  document.getElementById('dnav-'+tab).classList.add('active');
+}
+
+function updateStudentStats(userId){
+  const trades=DB.getTrades().filter(t=>t.userId===userId);
+  const total=trades.length;
+  const pass=trades.filter(t=>t.overall==='pass').length;
+  const rate=total>0?Math.round(pass/total*100)+'%':'—';
+  document.getElementById('s-total').textContent=total;
+  document.getElementById('s-pass').textContent=pass;
+  document.getElementById('s-rate').textContent=rate;
+
+  const c1f=trades.filter(t=>t.c1==='fail').length;
+  const c2f=trades.filter(t=>t.c2==='fail').length;
+  const c3f=trades.filter(t=>t.c3==='fail').length;
+  const denom=Math.max(total,1);
+  const bars=document.getElementById('student-criteria-bars');
+  bars.innerHTML=[
+    {label:'Direction Confirmed',val:c1f,pct:Math.round(c1f/denom*100)},
+    {label:'Higher High / Lower Low',val:c2f,pct:Math.round(c2f/denom*100)},
+    {label:'Previous HH / LL Visible',val:c3f,pct:Math.round(c3f/denom*100)}
+  ].map(b=>`<div class="crit-bar-row">
+    <div class="crit-bar-label">${b.label}</div>
+    <div class="crit-bar-track"><div class="crit-bar-fill fail" style="width:${b.pct}%"></div></div>
+    <div class="crit-bar-pct">${b.pct}%</div>
+  </div>`).join('');
+}
+
+function renderTradeHistory(userId){
+  const trades=DB.getTrades().filter(t=>t.userId===userId).sort((a,b)=>new Date(b.date)-new Date(a.date));
+  const wrap=document.getElementById('history-content');
+  if(!trades.length){wrap.innerHTML=`<div class="empty-state"><div class="es-icon">📋</div><p>No trades verified yet. Head to the Verify Trade tab to get started.</p></div>`;return;}
+  wrap.innerHTML=`<div class="history-table"><table>
+    <thead><tr><th>Date</th><th>Direction</th><th>Timeframe</th><th>Direction ✓</th><th>HH/LL ✓</th><th>Prev HH/LL ✓</th><th>Result</th></tr></thead>
+    <tbody>${trades.map(t=>`<tr>
+      <td>${new Date(t.date).toLocaleDateString()}</td>
+      <td><span class="badge ${t.direction}">${t.direction.toUpperCase()}</span></td>
+      <td><span style="font-size:12px;font-weight:600;color:var(--navy)">${t.timeframe||'—'}</span></td>
+      <td><span class="badge ${t.c1==='pass'?'pass':t.c1==='fail'?'fail':'partial'}">${t.c1}</span></td>
+      <td><span class="badge ${t.c2==='pass'?'pass':t.c2==='fail'?'fail':'partial'}">${t.c2}</span></td>
+      <td><span class="badge ${t.c3==='pass'?'pass':t.c3==='fail'?'fail':'partial'}">${t.c3}</span></td>
+      <td><span class="badge ${t.overall}">${t.overall.toUpperCase()}</span></td>
+    </tr>`).join('')}
+    </tbody></table></div>`;
+}
+
+// ══════════ VERIFIER LOGIC ══════════
+function vSetDir(dir){
+  vDirection=dir;
+  document.querySelectorAll('.dir-btn').forEach(b=>b.classList.remove('active','long','short'));
+  document.querySelectorAll('.tf-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('v-btn-'+dir).classList.add('active',dir);
+  vCheckReady();
+}
+function vSetTF(tf){
+  vTimeframe=tf;
+  document.querySelectorAll(".tf-btn").forEach(b=>b.classList.remove("active"));
+  document.getElementById("tf-"+tf).classList.add("active");
+  vCheckReady();
+}
+function vHandleFile(e){
+  const file=e.target.files[0];
+  if(file) vLoadImage(file);
+}
+function vLoadImage(file){
+  const r=new FileReader();
+  r.onload=e=>{
+    const dataUrl = e.target.result;
+    vImageBase64 = dataUrl.split(',')[1];
+    // Auto-detect media type from data URL
+    const mimeMatch = dataUrl.match(/data:([^;]+);/);
+    vImageType = mimeMatch ? mimeMatch[1] : 'image/png';
+    document.getElementById('v-preview-img').src=e.target.result;
+    document.getElementById('v-preview-wrap').style.display='block';
+    vCheckReady();
+  };
+  r.readAsDataURL(file);
+}
+function vCheckReady(){
+  document.getElementById('v-analyze-btn').disabled=!(vDirection&&vImageBase64);
+}
+document.getElementById('v-upload-zone').addEventListener('dragover',e=>{e.preventDefault();e.currentTarget.classList.add('drag-over');});
+document.getElementById('v-upload-zone').addEventListener('dragleave',e=>e.currentTarget.classList.remove('drag-over'));
+document.getElementById('v-upload-zone').addEventListener('drop',e=>{e.preventDefault();e.currentTarget.classList.remove('drag-over');const f=e.dataTransfer.files[0];if(f&&f.type.startsWith('image/'))vLoadImage(f);});
+
+async function vAnalyze(){
+  document.getElementById('v-error').style.display='none';
+  document.getElementById('v-analyze-btn').disabled=true;
+  document.getElementById('v-loading-card').style.display='block';
+  document.getElementById('v-results-card').classList.remove('v-results');
+  document.getElementById('v-results-card').style.display='none';
+
+  const dir=vDirection;
+  const tf=vTimeframe;
+  const hhll=dir==='long'?'Higher High (HH)':'Lower Low (LL)';
+  const prev=dir==='long'?'Previous Higher High (prev HH)':'Previous Lower Low (prev LL)';
+  const dirLabel=dir==='long'?'LONG (Bullish)':'SHORT (Bearish)';
+  const tfLabels={'1H':'1-Hour','4H':'4-Hour','1D':'Daily','1W':'Weekly'};
+  const tfLabel=tfLabels[tf]||tf;
+
+  const prompt=`You are a professional trading analyst for the "Luke 5" strategy taught by World Shifters Institute.
+
+Direction selected: ${dirLabel}
+Timeframe: ${tfLabel} chart
+
+Luke 5 requires ALL THREE:
+1. DIRECTION CONFIRMED: On the ${tfLabel} timeframe, chart supports ${dirLabel}. Look for trend alignment, price levels, momentum appropriate for this timeframe.
+2. ${hhll} MET: ${dir==='long'?'Clear Higher High — new swing high above previous swing high':'Clear Lower Low — new swing low below previous swing low'} visible on the ${tfLabel} chart.
+3. ${prev} VISIBLE: ${dir==='long'?'Previous Higher High clearly visible on chart confirming structural break':'Previous Lower Low clearly visible on chart confirming structural break'} on the ${tfLabel} timeframe.
+
+Respond ONLY in this JSON (no markdown):
+{"criterion1":{"status":"pass"|"fail"|"unclear","note":"observation"},"criterion2":{"status":"pass"|"fail"|"unclear","note":"observation"},"criterion3":{"status":"pass"|"fail"|"unclear","note":"observation"},"overall":"pass"|"fail"|"partial","analystNote":"2-3 sentence summary including timeframe context"}`;
+
+  try{
+    const apiKey = ANTHROPIC_API_KEY || localStorage.getItem('wsi_api_key') || '';
+    if(!apiKey){
+      document.getElementById('v-loading-card').style.display='none';
+      document.getElementById('v-analyze-btn').disabled=false;
+      const e=document.getElementById('v-error');
+      e.innerHTML='API key not configured. Admin: open the index.html file, paste your Anthropic API key into the ANTHROPIC_API_KEY field at the top of the script, then re-upload to GitHub.';
+      e.style.display='block';
+      return;
+    }
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:vImageType,data:vImageBase64}},{type:'text',text:prompt}]}]})});
+    const data=await res.json();
+
+    // Check for API-level errors
+    if(data.error){
+      throw new Error(data.error.message||'API error');
+    }
+    if(!data.content||!Array.isArray(data.content)){
+      throw new Error('Unexpected API response. Check your API key and billing at console.anthropic.com');
+    }
+
+    const txt=data.content.map(i=>i.text||'').join('').trim();
+
+    // Extract JSON even if wrapped in markdown or extra text
+    let parsed;
+    try{
+      const jsonMatch = txt.match(/\{[\s\S]*\}/);
+      if(!jsonMatch) throw new Error('No JSON found in response');
+      parsed = JSON.parse(jsonMatch[0]);
+    }catch(parseErr){
+      throw new Error('Could not parse AI response. Please try again.');
+    }
+
+    // Ensure all required fields exist with fallbacks
+    parsed.criterion1 = parsed.criterion1 || {status:'unclear', note:'Could not determine.'};
+    parsed.criterion2 = parsed.criterion2 || {status:'unclear', note:'Could not determine.'};
+    parsed.criterion3 = parsed.criterion3 || {status:'unclear', note:'Could not determine.'};
+    parsed.overall    = parsed.overall    || 'partial';
+    parsed.analystNote= parsed.analystNote|| 'Analysis complete.';
+
+    vShowResults(parsed,dir,tf);
+    vSaveTrade(parsed,dir,tf);
+  }catch(err){
+    document.getElementById('v-loading-card').style.display='none';
+    document.getElementById('v-analyze-btn').disabled=false;
+    const e=document.getElementById('v-error');
+    e.textContent='Analysis failed: '+err.message;
+    e.style.display='block';
+  }
+}
+
+function vSaveTrade(data,dir,tf){
+  const sess=DB.getSession();
+  if(!sess||!sess.userId) return;
+  DB.addTrade({id:'t'+Date.now(),userId:sess.userId,date:new Date().toISOString(),direction:dir,timeframe:tf||'—',c1:data.criterion1?.status,c2:data.criterion2?.status,c3:data.criterion3?.status,overall:data.overall,note:data.analystNote});
+  updateStudentStats(sess.userId);
+  renderTradeHistory(sess.userId);
+}
+
+function vShowResults(data,dir,tf){
+  document.getElementById('v-loading-card').style.display='none';
+  const hhll=dir==='long'?'Higher High (HH)':'Lower Low (LL)';
+  const prev=dir==='long'?'Previous Higher High':'Previous Lower Low';
+  const dirLabel=dir==='long'?'Long — Bullish':'Short — Bearish';
+
+  const vmap={pass:{cls:'pass',icon:'✅',label:'Strategy Confirmed',sub:'All Luke 5 criteria met — setup is valid.'},fail:{cls:'fail',icon:'❌',label:'Strategy Not Met',sub:'One or more criteria missing — do not enter.'},partial:{cls:'partial',icon:'⚠️',label:'Incomplete Setup',sub:'Some criteria unclear — review before entering.'}};
+  const v=vmap[data.overall]||vmap.partial;
+  const vb=document.getElementById('v-verdict-banner');
+  vb.className='verdict-banner '+v.cls;
+  vb.innerHTML=`<div class="verdict-icon">${v.icon}</div><div><div class="verdict-lbl">${v.label}</div><div class="verdict-sub">${v.sub}</div></div>`;
+
+  const smap={pass:{cls:'pass',icon:'✓',lbl:'CONFIRMED'},fail:{cls:'fail',icon:'✗',lbl:'NOT MET'},unclear:{cls:'warn',icon:'?',lbl:'UNCLEAR'}};
+  const items=[{title:'Direction Confirmed',sub:dirLabel,d:data.criterion1},{title:hhll+' Met',sub:'Structural criterion',d:data.criterion2},{title:prev+' Visible',sub:'Confirmation criterion',d:data.criterion3}];
+  document.getElementById('v-checklist').innerHTML=items.map((it,i)=>{const s=smap[it.d?.status]||smap.unclear;return`<div class="chk-item ${s.cls}" style="animation-delay:${0.05+i*.1}s"><div class="chk-icon">${s.icon}</div><div><div class="chk-title">${s.lbl} — ${it.title}</div><div class="chk-note">${it.d?.note||'No observation.'}</div></div></div>`;}).join('');
+  document.getElementById('v-ai-notes').textContent=data.analystNote||'No additional notes.';
+
+  const rc=document.getElementById('v-results-card');
+  rc.style.display='block';
+  rc.classList.add('v-results');
+  rc.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function vReset(){
+  vDirection=null; vTimeframe=null; vImageBase64=null; vImageType=null;
+  document.querySelectorAll('.dir-btn').forEach(b=>b.classList.remove('active','long','short'));
+  document.querySelectorAll('.tf-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('v-preview-wrap').style.display='none';
+  document.getElementById('v-preview-img').src='';
+  document.getElementById('v-file-input').value='';
+  document.getElementById('v-analyze-btn').disabled=true;
+  document.getElementById('v-results-card').style.display='none';
+  document.getElementById('v-loading-card').style.display='none';
+  document.getElementById('v-error').style.display='none';
+}
+
+// ══════════ ADMIN AUTH ══════════
+function toggleAdminPw(){
+  const inp = document.getElementById('admin-pass-input');
+  const btn = document.getElementById('pw-toggle');
+  if(inp.type==='password'){inp.type='text';btn.textContent='🙈';}
+  else{inp.type='password';btn.textContent='👁';}
+}
+
+function doAdminLogin(){
+  const pass=document.getElementById('admin-pass-input').value;
+  const err=document.getElementById('admin-login-error');
+  if(pass!==ADMIN_PASSWORD){err.textContent='Incorrect admin password.';err.style.display='block';return;}
+  DB.saveSession({isAdmin:true});
+  showView('admin');
+  updateNav('admin');
+  renderAdminDashboard();
+}
+function doAdminLogout(){DB.clearSession();showView('login');updateNav('login');}
+
+// ══════════ ADMIN DASHBOARD ══════════
+function showAdminTab(tab){
+  document.querySelectorAll('.admin-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.admin-nav-item').forEach(i=>i.classList.remove('active'));
+  document.getElementById('atab-'+tab).classList.add('active');
+  document.getElementById('anav-'+tab).classList.add('active');
+  if(tab==='students') renderStudentsTable();
+  if(tab==='analytics') renderAnalyticsCharts();
+  if(tab==='settings') loadApiKeyStatus();
+}
+
+function renderAdminDashboard(){
+  const users=DB.getUsers();
+  const trades=DB.getTrades();
+  const active=users.filter(u=>u.status==='active').length;
+  const suspended=users.filter(u=>u.status==='suspended').length;
+  const revenue=users.filter(u=>u.status==='active').reduce((s,u)=>s+({solo:29,signal:49,full:79}[u.plan]||0),0);
+  const passRate=trades.length>0?Math.round(trades.filter(t=>t.overall==='pass').length/trades.length*100):0;
+
+  document.getElementById('admin-stats-row').innerHTML=[
+    {lbl:'Total Members',val:users.length,sub:'registered'},
+    {lbl:'Active Subscribers',val:active,sub:'paying'},
+    {lbl:'Suspended',val:suspended,sub:'lapsed'},
+    {lbl:'Est. Monthly Revenue',val:'$'+revenue,sub:'active plans'},
+  ].map(s=>`<div class="a-stat"><div class="a-stat-lbl">${s.lbl}</div><div class="a-stat-val">${s.val}</div><div class="a-stat-sub">${s.sub}</div></div>`).join('');
+
+  // Plans chart
+  const planCounts={solo:0,signal:0,full:0};
+  users.forEach(u=>planCounts[u.plan]=(planCounts[u.plan]||0)+1);
+  if(adminCharts.plans) adminCharts.plans.destroy();
+  adminCharts.plans=new Chart(document.getElementById('chart-plans'),{type:'doughnut',data:{labels:['Solo Trader','Signal Subscriber','Full Access'],datasets:[{data:[planCounts.solo,planCounts.signal,planCounts.full],backgroundColor:['#0d1f3c','#b8942a','#162d56'],borderWidth:0}]},options:{plugins:{legend:{position:'bottom',labels:{font:{family:'Jost',size:12},color:'#444',padding:16}}},cutout:'60%'}});
+
+  // Results chart
+  const rc={pass:0,fail:0,partial:0};
+  trades.forEach(t=>rc[t.overall]=(rc[t.overall]||0)+1);
+  if(adminCharts.results) adminCharts.results.destroy();
+  adminCharts.results=new Chart(document.getElementById('chart-results'),{type:'doughnut',data:{labels:['Confirmed','Not Met','Partial'],datasets:[{data:[rc.pass,rc.fail,rc.partial],backgroundColor:['#2a7a4b','#8b1a1a','#b8942a'],borderWidth:0}]},options:{plugins:{legend:{position:'bottom',labels:{font:{family:'Jost',size:12},color:'#444',padding:16}}},cutout:'60%'}});
+
+  // Criteria bars
+  const c1f=trades.filter(t=>t.c1==='fail').length;
+  const c2f=trades.filter(t=>t.c2==='fail').length;
+  const c3f=trades.filter(t=>t.c3==='fail').length;
+  const d=Math.max(trades.length,1);
+  document.getElementById('admin-criteria-bars').innerHTML=[
+    {label:'Direction Confirmation',val:c1f,pct:Math.round(c1f/d*100)},
+    {label:'Higher High / Lower Low',val:c2f,pct:Math.round(c2f/d*100)},
+    {label:'Previous HH / LL Visible',val:c3f,pct:Math.round(c3f/d*100)}
+  ].map(b=>`<div class="crit-bar-row">
+    <div class="crit-bar-label">${b.label} <span style="font-size:11px;color:var(--muted)">(${b.val} fails)</span></div>
+    <div class="crit-bar-track"><div class="crit-bar-fill fail" style="width:${b.pct}%"></div></div>
+    <div class="crit-bar-pct">${b.pct}%</div>
+  </div>`).join('');
+}
+
+function renderStudentsTable(){
+  const q=(document.getElementById('student-search')?.value||'').toLowerCase();
+  const users=DB.getUsers().filter(u=>!q||(u.first+' '+u.last+u.email).toLowerCase().includes(q));
+  const trades=DB.getTrades();
+  const wrap=document.getElementById('students-table-wrap');
+  if(!users.length){wrap.innerHTML='<div class="empty-state"><div class="es-icon">👥</div><p>No students found.</p></div>';return;}
+  wrap.innerHTML=`<table><thead><tr><th>Name</th><th>Email</th><th>Plan</th><th>Status</th><th>Trades</th><th>Pass Rate</th><th>Action</th></tr></thead>
+  <tbody>${users.map(u=>{
+    const ut=trades.filter(t=>t.userId===u.id);
+    const pr=ut.length>0?Math.round(ut.filter(t=>t.overall==='pass').length/ut.length*100)+'%':'—';
+    return`<tr>
+      <td>${u.first} ${u.last}</td>
+      <td>${u.email}</td>
+      <td><span class="badge ${u.plan==='full'?'pass':u.plan==='signal'?'long':'partial'}">${PLANS[u.plan]?.name||u.plan}</span></td>
+      <td><span class="badge ${u.status==='active'?'pass':'fail'}">${u.status}</span></td>
+      <td>${ut.length}</td>
+      <td>${pr}</td>
+      <td><button class="toggle-status ${u.status}" onclick="toggleUserStatus('${u.id}')">${u.status==='active'?'Suspend':'Reactivate'}</button></td>
+    </tr>`;
+  }).join('')}</tbody></table>`;
+}
+
+function toggleUserStatus(uid){
+  const users=DB.getUsers();
+  const u=users.find(x=>x.id===uid);
+  if(!u) return;
+  u.status=u.status==='active'?'suspended':'active';
+  DB.saveUsers(users);
+  renderStudentsTable();
+  renderAdminDashboard();
+}
+
+function renderAnalyticsCharts(){
+  const trades=DB.getTrades();
+  // Daily chart (last 14 days)
+  const days=[];
+  const counts=[];
+  for(let i=13;i>=0;i--){
+    const d=new Date(); d.setDate(d.getDate()-i);
+    const ds=d.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+    days.push(ds);
+    const start=new Date(d); start.setHours(0,0,0,0);
+    const end=new Date(d); end.setHours(23,59,59,999);
+    counts.push(trades.filter(t=>{const td=new Date(t.date);return td>=start&&td<=end;}).length);
+  }
+  if(adminCharts.daily) adminCharts.daily.destroy();
+  adminCharts.daily=new Chart(document.getElementById('chart-daily'),{type:'bar',data:{labels:days,datasets:[{label:'Verifications',data:counts,backgroundColor:'rgba(184,148,42,0.7)',borderRadius:3}]},options:{plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{font:{family:'Jost',size:11}},grid:{color:'rgba(0,0,0,.05)'}},x:{ticks:{font:{family:'Jost',size:10}},grid:{display:false}}}}});
+
+  // Accuracy by plan
+  const plans=['solo','signal','full'];
+  const planAcc=plans.map(p=>{
+    const users=DB.getUsers().filter(u=>u.plan===p);
+    const uids=users.map(u=>u.id);
+    const pt=trades.filter(t=>uids.includes(t.userId));
+    return pt.length>0?Math.round(pt.filter(t=>t.overall==='pass').length/pt.length*100):0;
+  });
+  if(adminCharts.planAcc) adminCharts.planAcc.destroy();
+  adminCharts.planAcc=new Chart(document.getElementById('chart-plan-accuracy'),{type:'bar',data:{labels:['Solo Trader','Signal Subscriber','Full Access'],datasets:[{label:'Pass Rate %',data:planAcc,backgroundColor:['#0d1f3c','#b8942a','#162d56'],borderRadius:4}]},options:{plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,max:100,ticks:{callback:v=>v+'%',font:{family:'Jost',size:11}},grid:{color:'rgba(0,0,0,.05)'}},x:{ticks:{font:{family:'Jost',size:11}},grid:{display:false}}}}});
+
+  // Training recs
+  const c1f=trades.filter(t=>t.c1==='fail').length;
+  const c2f=trades.filter(t=>t.c2==='fail').length;
+  const c3f=trades.filter(t=>t.c3==='fail').length;
+  const recs=[
+    {criterion:'Direction Confirmation',fails:c1f,rec:'Students are struggling to identify trend direction. Consider adding exercises on reading market structure, identifying swing highs/lows, and momentum indicators.'},
+    {criterion:'Higher High / Lower Low',fails:c2f,rec:'Many students are missing or misidentifying the HH/LL. Add annotated chart examples showing clear HH/LL formations across multiple timeframes.'},
+    {criterion:'Previous HH / LL Visible',fails:c3f,rec:'Students are entering without confirming the previous structure. Emphasize the importance of zooming out to see the previous reference point before entry.'}
+  ].sort((a,b)=>b.fails-a.fails);
+  document.getElementById('training-recs').innerHTML=recs.map((r,i)=>`<div style="margin-bottom:20px;padding:18px 20px;background:var(--cream);border:1px solid var(--beige-dark);border-left:3px solid ${i===0?'#e57373':i===1?'#b8942a':'#0d1f3c'};border-radius:0 4px 4px 0;">
+    <div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:${i===0?'var(--fail)':i===1?'var(--gold)':'var(--navy)'};margin-bottom:6px;">#${i+1} Priority — ${r.criterion} <span style="font-weight:400;color:var(--muted)">(${r.fails} failures)</span></div>
+    <div style="font-size:13px;font-weight:300;color:#444;line-height:1.6;">${r.rec}</div>
+  </div>`).join('');
+}
+
+function saveApiKey(){
+  const key = document.getElementById('api-key-input').value.trim();
+  if(!key){return;}
+  localStorage.setItem('wsi_api_key', key);
+  const status = document.getElementById('api-key-status');
+  status.style.display='block';
+  status.style.cssText='display:block;background:#f0faf4;border:1px solid #c3e6cb;border-radius:4px;padding:10px 14px;font-size:13px;color:var(--success);margin-bottom:16px;';
+  status.textContent='✓ API key saved successfully. AI analysis is now active for all students.';
+  document.getElementById('api-key-input').value='';
+}
+
+function clearApiKey(){
+  localStorage.removeItem('wsi_api_key');
+  document.getElementById('api-key-input').value='';
+  const status = document.getElementById('api-key-status');
+  status.style.display='block';
+  status.style.cssText='display:block;background:#fdf4f4;border:1px solid #f5c6cb;border-radius:4px;padding:10px 14px;font-size:13px;color:var(--fail);margin-bottom:16px;';
+  status.textContent='API key cleared. AI analysis is disabled until a new key is entered.';
+}
+
+function loadApiKeyStatus(){
+  const key = localStorage.getItem('wsi_api_key');
+  const status = document.getElementById('api-key-status');
+  if(!status) return;
+  if(key){
+    status.style.display='block';
+    status.style.cssText='display:block;background:#f0faf4;border:1px solid #c3e6cb;border-radius:4px;padding:10px 14px;font-size:13px;color:var(--success);margin-bottom:16px;';
+    status.textContent='✓ API key is configured. AI analysis is active.';
+  }
+}
+
+// ══════════ INIT ══════════
+(function init(){
+  const sess=DB.getSession();
+  if(sess&&sess.isAdmin){showView('admin');updateNav('admin');renderAdminDashboard();}
+  else if(sess&&sess.userId){
+    const u=DB.getUserById(sess.userId);
+    if(u&&u.status==='suspended'){showView('suspended');updateNav('suspended');}
+    else if(u) enterStudentDashboard();
+    else showView('landing');
+  }
+  else showView('landing');
+})();
+</script>
+</body>
+</html>
